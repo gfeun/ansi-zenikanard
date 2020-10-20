@@ -1,6 +1,6 @@
-# Zenikanard terminal display
+# Zenikanards in the terminal
 
-Transcode zenikanard png images to ansi sequences viewable in a terminal
+Transcode zenikanard png image to ansi sequences viewable in a terminal.
 
 ![zenikanard-png](docs/zenikanard.png)
 
@@ -8,19 +8,7 @@ to
 
 ![zenikanard-ansi](docs/zenikanard-ansi.png)
 
-## Description
-
-This project first fetches the zenikanards from https://theduckgallery.zenika.com/ using https://github.com/mxschmitt/playwright-go
-
-It then transcodes the png image using a transcoding program (see below).
-
-Finally a webserver is started providing two routes:
-
-- GET /[github username] -> Get zenikanard of the provided github username
-- GET / -> circles through all the gallery zenikanard
-
-Display depends on the terminal used.
-The default transcoding program (viu) should output sequences viewable in most terminal.
+Also provides a webserver to serve transcoded zenikanards.
 
 ## Quickstart
 
@@ -39,15 +27,28 @@ Tested only on linux.
 
 ### Run
 
-`go run main.go`
+Ensure you have **$GOPATH/bin** in your path or call with full path.
 
-On another terminal:
+The following commands will download the module and start the program.
+
+The program will create a directory called cache in your working directory.
+
+```bash
+go get github.com/gfeun/ansi-zenikanard
+ansi-zenikanard
+```
+
+In another terminal run:
 
 `curl http://localhost:8080`
 
-If using another backend then viu you need to specify at the cli:
+If using another backend than viu you need to specify it at the cli:
 
-`go run main.go -image-transcoder img2txt`
+```bash
+ansi-zenikanard -image-transcoder img2txt
+```
+
+Other options are available, see Usage section.
 
 ### Usage
 
@@ -71,7 +72,7 @@ Usage of ansi-zenikanard:
 
 ## Internals
 
-playwright-go is used to [scrape](./scrape/scrape.go) the duck gallery.
+This project first fetches the zenikanards from https://theduckgallery.zenika.com/ using https://github.com/mxschmitt/playwright-go
 Playwright launches a headless browser which loads the duck gallery.
 A query selector is then used to get all img tag corresponding to zenikanards.
 
@@ -91,10 +92,10 @@ In this case it is sent through another channel: the transcoding channel.
 
 Behind this channel is another pool of workers.
 When a transcode worker receives a zenikanard it launches an external process and passes the png image to it.
+The default process called is [viu](https://github.com/atanunq/viu) which will output sequences viewable in most terminals.
 The resulting ansi output is stored in the zenikanard struct and in a local cache file if the cache is enabled
 
-Once all zenikanards have been processed, a webserver is started with a single handler.
+Finally once all zenikanards have been processed, a webserver is started providing two routes:
 
-The handler will respond to GET "/" by iterating over all zenikanard and sending them one by one to the client
-
-The handler also responds to GET "/[github username]" with a specific zenikanard if found
+- GET /[github username] -> Get zenikanard of the provided github username
+- GET / -> circles through all the gallery zenikanard
