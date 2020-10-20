@@ -16,7 +16,7 @@ const (
 )
 
 // FetchZenikanards parses duck gallery web page and get all zenikanard html img
-// it then iterates over each one and send them through the out channel
+// It stores them in the zenikanards.List array
 func FetchZenikanards(zenikanards *zenikanard.Zenikanards) error {
 	zenikanards.Lock()
 	defer zenikanards.Unlock()
