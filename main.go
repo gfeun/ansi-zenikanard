@@ -26,6 +26,7 @@ var (
 	cacheEnabled             bool
 	cacheOnly                bool
 	cacheDir                 string
+	fetchOnly                bool
 	timeBetweenZenikanard    int
 	imageTranscoder          string
 	playwrightBrowserInstall bool
@@ -67,7 +68,7 @@ func transcodeImage() {
 	}
 }
 
-// doneWorker just increments the progress bar
+// done just increments the progress bar when other workers are done
 func done() {
 	for range doneChan {
 		_ = bar.Add(1)
@@ -79,6 +80,7 @@ func main() {
 	flag.BoolVar(&cacheEnabled, "cache", true, "use local cache")
 	flag.BoolVar(&cacheOnly, "cache-only", false, "don't scrape website, use only local cache. Useful on machine where playwright is not supported, raspi for example. Assumes cache enabled")
 	flag.StringVar(&cacheDir, "cache-dir", "./cache", "cache directory to store zenikanards")
+	flag.BoolVar(&fetchOnly, "fetch-only", false, "fetch zenikanard and stop")
 	flag.IntVar(&timeBetweenZenikanard, "transition-time", 500, "time to sleep between zenikanard in millisecond")
 	flag.StringVar(&imageTranscoder, "image-transcoder", "viu", "program to transcode png to ansi. one of viu, img2txt, pixterm")
 	flag.BoolVar(&playwrightBrowserInstall, "playwright-install", false, "install browsers")
@@ -170,11 +172,17 @@ func main() {
 	close(doneChan)
 	doneWorker.Wait()
 
-	log.Info("Init done, all zenikanards loaded, start webserver...")
+	log.Info("Init done, all zenikanards loaded")
+
+	if fetchOnly {
+		return
+	}
+
+	log.Info("Start Webserver on: ", listenAddr)
 	handler := handler.NewZenikanardHandler(&zenikanards, timeBetweenZenikanard)
 	http.DefaultServeMux.Handle("/", handler)
 
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+	if err := http.ListenAndServe(listenAddr, nil); err != nil {
 		log.Fatal(err)
 	}
 }
