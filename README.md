@@ -12,7 +12,37 @@ Also provides a webserver to serve transcoded zenikanards.
 
 ## Quickstart
 
-### Dependencies
+### Using Docker
+
+```bash
+git clone https://github.com/gfeun/ansi-zenikanard
+cd ansi-zenikanard
+docker build -t ansi-zenikanard .
+docker run -p 8080:8080 ansi-zenikanard
+```
+
+You can mount the cache directory to save the zenikanard cache across docker run:
+
+```bash
+docker run -v $PWD/cache:/cache -p 8080:8080 ansi-zenikanard
+```
+
+The default docker image built using docker build is heavy because it includes a web browser to scrape the zenikanard gallery.
+
+If you want to build a lighter image you can use:
+
+```bash
+docker build --target light -t ansi-zenikanard:light .
+docker run -p 8080:8080 ansi-zenikanard:light
+```
+
+This will build an image including only the webserver.
+This requires that you run the heavy image once to get and convert zenikanards in the cache directory.
+You can then pass the cache to the light image by mounting the cache directory as a volume.
+
+### Manually
+
+#### Dependencies
 
 You need one of the following transcoding backend installed:
 
@@ -25,7 +55,7 @@ x86-64 machines Windows/Mac/Linux should be ok.
 
 Tested only on linux.
 
-### Run
+#### Run
 
 Ensure you have **$GOPATH/bin** in your path or call with full path.
 
@@ -55,19 +85,23 @@ Other options are available, see Usage section.
 ```
 Usage of ansi-zenikanard:
   -cache
-    use local cache (default true)
+      use local cache (default true)
   -cache-dir string
-    cache directory to store zenikanards (default "./cache")
+      cache directory to store zenikanards (default "./cache")
   -cache-only
-    don't scrape website, use only local cache. Useful on machine where playwright is not supported, raspi for example. Assumes cache enabled
-  -h help
+      don't scrape website, use only local cache. Useful on machine where playwright is not supported, raspi for example. Assumes cache enabled
+  -fetch-only
+      fetch zenikanard and stop
+  -h  help
   -image-transcoder string
-    program to transcode png to ansi. one of viu, img2txt, pixterm (default "viu")
+      program to transcode png to ansi. one of viu, img2txt, pixterm (default "viu")
   -listen-addr string
-    adress and port fed to http.ListenAndServe (default ":8080")
+      adress and port fed to http.ListenAndServe (default ":8080")
+  -playwright-install
+      install browsers
   -transition-time int
-    time to sleep between zenikanard in millisecond (default 500)
-  -v enable debug output
+      time to sleep between zenikanard in millisecond (default 500)
+  -v  enable debug output
 ```
 
 ## Internals
