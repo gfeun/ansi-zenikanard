@@ -22,14 +22,15 @@ var (
 
 // CLI Flags
 var (
-	listenAddr            string
-	cacheEnabled          bool
-	cacheOnly             bool
-	cacheDir              string
-	timeBetweenZenikanard int
-	imageTranscoder       string
-	verbose               bool
-	help                  bool
+	listenAddr               string
+	cacheEnabled             bool
+	cacheOnly                bool
+	cacheDir                 string
+	timeBetweenZenikanard    int
+	imageTranscoder          string
+	playwrightBrowserInstall bool
+	verbose                  bool
+	help                     bool
 )
 
 var (
@@ -80,6 +81,7 @@ func main() {
 	flag.StringVar(&cacheDir, "cache-dir", "./cache", "cache directory to store zenikanards")
 	flag.IntVar(&timeBetweenZenikanard, "transition-time", 500, "time to sleep between zenikanard in millisecond")
 	flag.StringVar(&imageTranscoder, "image-transcoder", "viu", "program to transcode png to ansi. one of viu, img2txt, pixterm")
+	flag.BoolVar(&playwrightBrowserInstall, "playwright-install", false, "install browsers")
 	flag.BoolVar(&verbose, "v", false, "enable debug output")
 	flag.BoolVar(&help, "h", false, "help")
 
@@ -92,6 +94,13 @@ func main() {
 
 	if verbose {
 		log.SetLevel(log.DebugLevel)
+	}
+
+	if playwrightBrowserInstall {
+		if err := scrape.InitPlaywright(); err != nil {
+			log.Fatal(err)
+		}
+		return
 	}
 
 	if cacheOnly {

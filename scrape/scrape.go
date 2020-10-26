@@ -15,6 +15,11 @@ const (
 	zenikanardSelector = "#gallery img[src]"
 )
 
+// InitPlaywright installs browsers
+func InitPlaywright() error {
+	return playwright.Install()
+}
+
 // FetchZenikanards parses duck gallery web page and get all zenikanard html img
 // It stores them in the zenikanards.List array
 func FetchZenikanards(zenikanards *zenikanard.Zenikanards) error {
