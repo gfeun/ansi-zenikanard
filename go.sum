@@ -11,6 +11,8 @@ github.com/mitchellh/colorstring v0.0.0-20190213212951-d06e56a500db h1:62I3jR2Em
 github.com/mitchellh/colorstring v0.0.0-20190213212951-d06e56a500db/go.mod h1:l0dey0ia/Uv7NcFFVbCLtqEBQbrT4OCwCSKTEv6enCw=
 github.com/mxschmitt/playwright-go v0.0.0-20200913203355-6b035002afc1 h1:+Wo6o2LwZ748kPpDEeqRYfZWgF+AMTMS5LCZvdxNQdE=
 github.com/mxschmitt/playwright-go v0.0.0-20200913203355-6b035002afc1/go.mod h1:jyFRo259BtiMWc5or7cQRtbYlH3eetqUYq5ohSR/xkM=
+github.com/mxschmitt/playwright-go v0.0.0-20201022121208-5de08c36d292 h1:dcWQl2vQab7oIV3bflcLtSYBLUsVk+cQfd+IxqccjDU=
+github.com/mxschmitt/playwright-go v0.0.0-20201022121208-5de08c36d292/go.mod h1:jyFRo259BtiMWc5or7cQRtbYlH3eetqUYq5ohSR/xkM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/schollz/progressbar/v3 v3.6.1 h1:3vtTlSk1IntZNdqt8JoGDYZ+vmbJ2fvm2+jLeB7QHbQ=
 github.com/schollz/progressbar/v3 v3.6.1/go.mod h1:3B25e7a0JCjz1joGNAk7E2TnSr0x+aYQ0sZPs8fPwC0=
