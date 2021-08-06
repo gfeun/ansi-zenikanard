@@ -42,6 +42,6 @@ COPY --from=build-go /app/ansi-zenikanard /bin/ansi-zenikanard
 
 # Preload browsers. Necessary due to hardcoded browser versions in playwright-go
 # different than the ones packaged in this image.
-RUN /bin/ansi-zenikanard -playwright-browser-install
+RUN /bin/ansi-zenikanard -playwright-install
 
 ENTRYPOINT ["/bin/ansi-zenikanard"]
